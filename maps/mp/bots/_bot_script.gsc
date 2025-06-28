@@ -90,7 +90,7 @@ bot_get_prestige()
 	}
 	else if ( p_dvar == -2 )
 	{
-		p = randomint( 12 );
+		p = randomint( 11 );
 	}
 	else
 	{
@@ -1651,6 +1651,10 @@ difficulty()
 	}
 }
 
+skill_value(a, b, skill) {
+	return a + skill * (b - a);
+}
+
 /*
 	Sets the bot difficulty.
 */
@@ -1668,37 +1672,41 @@ set_diff()
 			break;
 			
 		case 9:
+			skill_min = getdvarfloat("bots_skill_random_min");
+			skill_max = getdvarfloat("bots_skill_random_max");
+			skill = randomfloatrange(skill_min, skill_max);
+			
 			self.pers[ "bots" ][ "skill" ][ "base" ] = randomintrange( 1, 7 );
-			self.pers[ "bots" ][ "skill" ][ "aim_time" ] = 0.05 * randomintrange( 1, 20 );
-			self.pers[ "bots" ][ "skill" ][ "init_react_time" ] = 50 * randomint( 100 );
-			self.pers[ "bots" ][ "skill" ][ "reaction_time" ] = 50 * randomint( 100 );
-			self.pers[ "bots" ][ "skill" ][ "remember_time" ] = 50 * randomint( 100 );
-			self.pers[ "bots" ][ "skill" ][ "no_trace_ads_time" ] = 50 * randomint( 100 );
-			self.pers[ "bots" ][ "skill" ][ "no_trace_look_time" ] = 50 * randomint( 100 );
-			self.pers[ "bots" ][ "skill" ][ "fov" ] = randomfloatrange( -1, 1 );
+			self.pers[ "bots" ][ "skill" ][ "aim_time" ] = skill_value(0.6, 0.1, skill);
+			self.pers[ "bots" ][ "skill" ][ "init_react_time" ] = Round(skill_value(1500, 100, skill));
+			self.pers[ "bots" ][ "skill" ][ "reaction_time" ] = Round(skill_value(1000, 50, skill));
+			self.pers[ "bots" ][ "skill" ][ "remember_time" ] = Round(skill_value(750, 7500, skill));
+			self.pers[ "bots" ][ "skill" ][ "no_trace_ads_time" ] = Round(skill_value(500, 2500, skill));
+			self.pers[ "bots" ][ "skill" ][ "no_trace_look_time" ] = Round(skill_value(600, 4000, skill));
+			self.pers[ "bots" ][ "skill" ][ "fov" ] = skill_value(0.7, 0.4, skill);
 			
-			randomNum = randomintrange( 500, 25000 );
-			self.pers[ "bots" ][ "skill" ][ "dist_start" ] = randomNum;
-			self.pers[ "bots" ][ "skill" ][ "dist_max" ] = randomNum * 2;
+			randomNum = skill_value(1000, 10000, skill);
+			self.pers[ "bots" ][ "skill" ][ "dist_start" ] = Round(randomNum);
+			self.pers[ "bots" ][ "skill" ][ "dist_max" ] = Round(randomNum * 1.5);
 			
-			self.pers[ "bots" ][ "skill" ][ "spawn_time" ] = 0.05 * randomint( 20 );
-			self.pers[ "bots" ][ "skill" ][ "help_dist" ] = randomintrange( 500, 25000 );
-			self.pers[ "bots" ][ "skill" ][ "semi_time" ] = randomfloatrange( 0.05, 1 );
-			self.pers[ "bots" ][ "skill" ][ "shoot_after_time" ] = randomfloatrange( 0.05, 1 );
-			self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] = randomfloatrange( 0.05, 1 );
-			self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ] = randomfloatrange( 0.05, 1 );
-			self.pers[ "bots" ][ "skill" ][ "bone_update_interval" ] = randomfloatrange( 0.05, 1 );
-			self.pers[ "bots" ][ "skill" ][ "bones" ] = "j_head,j_spineupper,j_ankle_le,j_ankle_ri";
+			self.pers[ "bots" ][ "skill" ][ "spawn_time" ] = skill_value(0.75, 0.05, skill);
+			self.pers[ "bots" ][ "skill" ][ "help_dist" ] = Round(skill_value(0, 3000, skill));
+			self.pers[ "bots" ][ "skill" ][ "semi_time" ] = skill_value(0.9, 0.1, skill);
+			self.pers[ "bots" ][ "skill" ][ "shoot_after_time" ] = skill_value(1.0, 0.0, skill);
+			self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] = skill_value(1.5, 0.0, skill);
+			self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ] = skill_value(4.0, 0.0, skill);
+			self.pers[ "bots" ][ "skill" ][ "bone_update_interval" ] = skill_value(2.0, 0.05, skill);
+			self.pers[ "bots" ][ "skill" ][ "bones" ] = "j_head,j_spineupper";
 			
-			self.pers[ "bots" ][ "behavior" ][ "strafe" ] = randomint( 100 );
-			self.pers[ "bots" ][ "behavior" ][ "nade" ] = randomint( 100 );
-			self.pers[ "bots" ][ "behavior" ][ "sprint" ] = randomint( 100 );
-			self.pers[ "bots" ][ "behavior" ][ "camp" ] = randomint( 100 );
-			self.pers[ "bots" ][ "behavior" ][ "follow" ] = randomint( 100 );
-			self.pers[ "bots" ][ "behavior" ][ "crouch" ] = randomint( 100 );
-			self.pers[ "bots" ][ "behavior" ][ "switch" ] = randomint( 100 );
-			self.pers[ "bots" ][ "behavior" ][ "class" ] = randomint( 100 );
-			self.pers[ "bots" ][ "behavior" ][ "jump" ] = randomint( 100 );
+			self.pers[ "bots" ][ "behavior" ][ "strafe" ] = Round(skill_value(0, 65, skill));
+			self.pers[ "bots" ][ "behavior" ][ "nade" ] = Round(skill_value(10, 65, skill));
+			self.pers[ "bots" ][ "behavior" ][ "sprint" ] = Round(skill_value(30, 70, skill));
+			self.pers[ "bots" ][ "behavior" ][ "camp" ] = 5;
+			self.pers[ "bots" ][ "behavior" ][ "follow" ] = 5;
+			self.pers[ "bots" ][ "behavior" ][ "crouch" ] = Round(skill_value(20, 5, skill));
+			self.pers[ "bots" ][ "behavior" ][ "switch" ] = 2;
+			self.pers[ "bots" ][ "behavior" ][ "class" ] = 2;
+			self.pers[ "bots" ][ "behavior" ][ "jump" ] = Round(skill_value(0, 90, skill));
 			break;
 			
 		default:

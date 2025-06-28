@@ -139,6 +139,16 @@ init()
 	{
 		setdvar( "bots_skill_max", 7 );
 	}
+
+	if ( getdvar( "bots_skill_random_min" ) == "" )
+	{
+		setdvar( "bots_skill_random_min", 0.6 );
+	}
+	
+	if ( getdvar( "bots_skill_random_max" ) == "" )
+	{
+		setdvar( "bots_skill_random_max", 0.9);
+	}
 	
 	if ( getdvar( "bots_loadout_reasonable" ) == "" ) // filter out the bad 'guns' and perks
 	{
